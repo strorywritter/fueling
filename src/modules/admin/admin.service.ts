@@ -30,6 +30,14 @@ export class AdminService {
     return Station;
   }
 
+  async getStationByName(stationName: string): Promise<Station> {
+    const Station = await this.stationModel.findOne({name : stationName}).lean();
+    if (isEmpty(Station)) {
+      throw new BadRequestException('Can not find a station for given Name');
+    }
+    return Station;
+  }
+
   async decreseStock(stationId: string, stock: number): Promise<Station> {
     const checkStation = await this.getStationById(stationId);
     if (isEmpty(checkStation)) {

@@ -12,6 +12,6 @@ import { StationSchema } from './schema/station.schema';
   ],
   providers: [AdminService],
   controllers: [AdminController],
-  // exports: [AdminService],
+  exports: [AdminService],
 })
 export class AdminModule {}
