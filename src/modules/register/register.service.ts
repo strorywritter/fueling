@@ -53,7 +53,8 @@ export class RegisterService {
     }
     const returnData = {
       loginStatus : true,
-      userDetails : userDtails
+      userId : userDtails._id,
+      userName : userDtails.name
     }
     return returnData;
   }
