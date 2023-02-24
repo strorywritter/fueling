@@ -51,7 +51,11 @@ export class RegisterService {
     if(decryptedPassword != user.password){
       throw new BadRequestException('password not match');
     }
-    return true;
+    const returnData = {
+      loginStatus : true,
+      userDetails : userDtails
+    }
+    return returnData;
   }
 
   async getUser(userId: string): Promise<any> {
