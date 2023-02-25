@@ -14,6 +14,9 @@ export class Station {
 
   @Prop()
   stock: number;
+
+  @Prop()
+  manager: string;
 }
 
 

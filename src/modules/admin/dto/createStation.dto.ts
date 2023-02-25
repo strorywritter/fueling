@@ -1,4 +1,4 @@
-import { IsBoolean, IsEnum, IsMongoId, isMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsEmail, IsEnum, IsMongoId, isMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { createStationI } from '../admin.types';
 
 export enum Districts {
@@ -44,6 +44,19 @@ export class createStationDto {
     @IsNotEmpty()
     @IsNumber()
     readonly stock: number
+
+    @IsNotEmpty()
+    @IsString()
+    readonly manager: string
+
+    @IsNotEmpty()
+    @IsEmail()
+    readonly email: string;
+
+    @IsNotEmpty()
+    @IsString()
+    readonly password: string;
+
 
 }
 

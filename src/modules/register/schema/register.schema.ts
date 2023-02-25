@@ -18,12 +18,14 @@ export class register {
   @Prop()
   role: string;
 
-  @Prop({ unique: true })
-  vehicleNumber: string;
+  @Prop()
+  station?: string;
+
+  @Prop({ unique: true, sparse: true })
+  vehicleNumber?: string;
 
   @Prop({ default: 20 })
-  weeklyQuato: number;
+  weeklyQuato?: number;
 }
-
 
 export const registerSchema = SchemaFactory.createForClass(register)

@@ -3,6 +3,8 @@ import { isEmpty } from 'lodash';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Station, StationDocument } from './schema/station.schema';
+import { RegisterService } from '../register/register.service';
+import { createStationDto } from './dto/createStation.dto';
 require('dotenv').config();
 
 @Injectable()
@@ -10,10 +12,29 @@ export class AdminService {
   constructor(
     @InjectModel('station')
     private readonly stationModel: Model<StationDocument>,
+    readonly registerService: RegisterService
   ) {}
 
-  async createStation(station: Station): Promise<Station> {
-    const newStation = new this.stationModel(station);
+  async createStation(station: createStationDto): Promise<any> {
+    
+    const Manager = {
+      name: station.manager,
+      email: station.email,
+      password: station.password,
+      // station: "Not Created"
+    };
+    const createManager = await this.registerService.createManager(Manager)
+    
+    const Station = {
+      name: station.name,
+      district: station.district,
+      stock: station.stock,
+      manager: createManager._id
+    };
+    const newStation = await new this.stationModel(Station);
+
+    await this.registerService.updateManager(createManager._id,newStation._id)
+
     return newStation.save();
   }
 

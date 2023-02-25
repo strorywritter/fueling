@@ -1,10 +1,10 @@
-import { BadRequestException, Inject, Injectable, Scope } from '@nestjs/common';
-import { isEmpty } from 'lodash';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { isEmpty } from 'lodash';
 import { Model } from 'mongoose';
-import { register, RegisterDocument } from './schema/register.schema';
-import { registerDto } from './dto/register.dto';
 import { loginDto } from './dto/login.dto';
+import { managerDto, registerDto } from './dto/register.dto';
+import { register, RegisterDocument } from './schema/register.schema';
 require('dotenv').config();
 
 const Cryptr = require('cryptr');
@@ -40,6 +40,29 @@ export class RegisterService {
       role: 'USER'
     });
     return newUser.save();
+  }
+
+  async createManager(manager: managerDto): Promise<any> {
+
+    const checkMail = await this.registerModel.findOne( { email: manager.email } ).lean()
+    if (!isEmpty(checkMail)) {
+      throw new BadRequestException('Email already used');
+    }
+    const encryptedPassword = cryptr.encrypt(manager.password);
+    // const decryptedString = cryptr.decrypt(encryptedString);
+    const newUser = new this.registerModel({
+      name: manager.name,
+      email: manager.email,
+      password: encryptedPassword,
+      role: 'MANAGER'
+    });
+    return newUser.save();
+  }
+
+  async updateManager(manager: string, stationId: string): Promise<any> {
+
+    return await this.registerModel.findByIdAndUpdate(manager,{station: stationId})
+    
   }
 
   async login (user: loginDto): Promise<any> {
