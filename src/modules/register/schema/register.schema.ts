@@ -15,6 +15,9 @@ export class register {
   @Prop()
   password: string;
 
+  @Prop()
+  role: string;
+
   @Prop({ unique: true })
   vehicleNumber: string;
 

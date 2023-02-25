@@ -93,7 +93,7 @@ export class ConsumerService {
       .find({ status: 'REQUESTED' })
       .lean();
     if (isEmpty(requests)) {
-      throw new BadRequestException('No Active requests for user');
+      throw new BadRequestException('No Active requests');
     }
     return requests;
   }

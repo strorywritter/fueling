@@ -36,7 +36,8 @@ export class RegisterService {
       name: user.name,
       email: user.email,
       password: encryptedPassword,
-      vehicleNumber: user.vehicleNumber
+      vehicleNumber: user.vehicleNumber,
+      role: 'USER'
     });
     return newUser.save();
   }
@@ -54,7 +55,8 @@ export class RegisterService {
     const returnData = {
       loginStatus : true,
       userId : userDtails._id,
-      userName : userDtails.name
+      userName : userDtails.name,
+      userRole : userDtails.role
     }
     return returnData;
   }
