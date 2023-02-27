@@ -106,30 +106,51 @@ export class ConsumerService {
     return requests;
   }
 
-  async completeRequest(requestId: string): Promise<any> {
+  async completeRequest(
+    requestId: string,
+    fueldedStatus: boolean,
+  ): Promise<any> {
     const request = await this.consumerModel.findById(requestId).lean();
     if (isEmpty(request)) {
       throw new BadRequestException('Can not find a Request for given Id');
     }
 
-    // reduce user quota
-    const user = await this.registerService.getUser(request['user']);
-    await this.registerService.reduceWeeklyQuota(
-      request['user'],
-      user['weeklyQuato'] - request['amount'],
-    );
+    if (fueldedStatus == true) {
+      // reduce user quota
+      const user = await this.registerService.getUser(request['user']);
+      await this.registerService.reduceWeeklyQuota(
+        request['user'],
+        user['weeklyQuato'] - request['amount'],
+      );
 
-    // reduce station quota
-    await this.stationrService.decreseStock(
-      request['station'],
-      request['amount'],
-    );
+      // reduce station quota
+      await this.stationrService.decreseStock(
+        request['station'],
+        request['amount'],
+      );
 
-    // update request
-    return await this.consumerModel.findByIdAndUpdate(
-      requestId,
-      { status: 'completed' },
-      { new: true },
-    );
+      // update request
+      return await this.consumerModel.findByIdAndUpdate(
+        requestId,
+        { status: 'completed' },
+        { new: true },
+      );
+    }
+
+    if (fueldedStatus == false) {
+      // reduce user quota
+      const user = await this.registerService.getUser(request['user']);
+      await this.registerService.reduceWeeklyQuota(
+        request['user'],
+        user['weeklyQuato'] - request['amount'],
+      );
+
+      // update request
+      return await this.consumerModel.findByIdAndUpdate(
+        requestId,
+        { status: 'expired' },
+        { new: true },
+      );
+    }
   }
 }

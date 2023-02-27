@@ -28,8 +28,8 @@ export class ConsumerController {
   }
 
   @Patch('completeRequest/:requestId')
-  async completeRequest(@Param() request: getRequest){
-    return this.consumerService.completeRequest(request.requestId)
+  async completeRequest(@Param() request: getRequest,@Body() body: any){
+    return this.consumerService.completeRequest(request.requestId, body.reqStatus)
   }
 
 
