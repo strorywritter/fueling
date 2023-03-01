@@ -59,7 +59,7 @@ export class AdminService {
     return Station;
   }
 
-  async decreseStock(stationId: string, stock: number): Promise<Station> {
+  async decreseStock(stationId: string, stock: number): Promise<any> {
     const checkStation = await this.getStationById(stationId);
     if (isEmpty(checkStation)) {
       throw new BadRequestException('Can not find a station for given Id');
@@ -75,7 +75,7 @@ export class AdminService {
       },
       { new: true },
     );
-    return Station;
+    return { data: Station };
   }
 
   async increseStock(stationId: string, stock: number): Promise<any> {
@@ -93,6 +93,6 @@ export class AdminService {
       },
       { new: true },
     );
-    return Station;
+    return { data: Station };
   }
 }
