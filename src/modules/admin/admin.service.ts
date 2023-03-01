@@ -64,11 +64,12 @@ export class AdminService {
     if (isEmpty(checkStation)) {
       throw new BadRequestException('Can not find a station for given Id');
     }
-    const oldStock = Number(checkStation.stock);
+    const oldStock = Number(checkStation["data"].stock);
     const change = Number(stock);
     const newStock = oldStock - change;
+
     const Station = await this.stationModel.findByIdAndUpdate(
-      checkStation['_id'],
+      checkStation["data"]['_id'],
       {
         stock: newStock,
       },
@@ -82,11 +83,11 @@ export class AdminService {
     if (isEmpty(checkStation)) {
       throw new BadRequestException('Can not find a station for given Id');
     }
-    const oldStock = Number(checkStation.stock);
+    const oldStock = Number(checkStation["data"].stock);
     const change = Number(stock);
     const newStock = oldStock + change;
     const Station = await this.stationModel.findByIdAndUpdate(
-      checkStation['_id'],
+      checkStation["data"]['_id'],
       {
         stock: newStock,
       },
