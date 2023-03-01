@@ -84,8 +84,9 @@ export class ConsumerService {
   }
 
   async getAllRequests(): Promise<any> {
-    const reuests = await this.consumerModel.find().lean();
-    return reuests;
+    const requests = await this.consumerModel.find().lean();
+    return { data: requests };
+   
   }
 
   async getActiveRequests(): Promise<any> {
@@ -95,7 +96,7 @@ export class ConsumerService {
     if (isEmpty(requests)) {
       throw new BadRequestException('No Active requests');
     }
-    return requests;
+    return { data: requests };
   }
 
   async getRequestsByUser(user: string): Promise<any> {
@@ -103,7 +104,7 @@ export class ConsumerService {
     if (isEmpty(requests)) {
       throw new BadRequestException('No requests for user');
     }
-    return requests;
+    return { data: requests };
   }
 
   async completeRequest(

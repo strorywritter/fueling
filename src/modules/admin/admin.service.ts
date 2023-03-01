@@ -40,15 +40,15 @@ export class AdminService {
 
   async getAllStations(): Promise<any> {
     const Stations = await this.stationModel.find().lean();
-    return Stations;
+    return { data: Stations };
   }
 
-  async getStationById(stationId: string): Promise<Station> {
+  async getStationById(stationId: string): Promise<any> {
     const Station = await this.stationModel.findById(stationId).lean();
     if (isEmpty(Station)) {
       throw new BadRequestException('Can not find a station for given Id');
     }
-    return Station;
+    return { data: Station };
   }
 
   async getStationByName(stationName: string): Promise<Station> {
@@ -77,7 +77,7 @@ export class AdminService {
     return Station;
   }
 
-  async increseStock(stationId: string, stock: number): Promise<Station> {
+  async increseStock(stationId: string, stock: number): Promise<any> {
     const checkStation = await this.getStationById(stationId);
     if (isEmpty(checkStation)) {
       throw new BadRequestException('Can not find a station for given Id');
