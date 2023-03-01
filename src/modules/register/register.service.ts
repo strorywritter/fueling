@@ -41,4 +41,25 @@ export class RegisterService {
     });
     return newUser.save();
   }
+
+  // Kalani
+  async login (user: loginDto): Promise<any> {
+    const userDtails = await this.registerModel.findOne( { email: user.email } ).lean()
+    if (isEmpty(userDtails)) {
+      throw new BadRequestException('User not found');
+    }
+    const decryptedPassword = cryptr.decrypt(userDtails.password);
+
+    if(decryptedPassword != user.password){
+      throw new BadRequestException('password not match');
+    }
+    const returnData = {
+      loginStatus : true,
+      userId : userDtails._id,
+      userName : userDtails.name,
+      vehicleNumber : userDtails.vehicleNumber,
+      userRole : userDtails.role
+    }
+    return returnData;
+  }
 }
