@@ -16,20 +16,20 @@ export class RegisterService {
   constructor(
     @InjectModel('register')
     private readonly registerModel: Model<RegisterDocument>,
-  ) {}
-
+  ) { }
+  // susanthika
   async register(user: registerDto): Promise<register> {
 
-    const checkMail = await this.registerModel.findOne( { email: user.email } ).lean()
+    const checkMail = await this.registerModel.findOne({ email: user.email }).lean()
     if (!isEmpty(checkMail)) {
       throw new BadRequestException('Email already used');
     }
 
-    const checkVehicleNum = await this.registerModel.findOne( { vehicleNumber: user.vehicleNumber } ).lean()
+    const checkVehicleNum = await this.registerModel.findOne({ vehicleNumber: user.vehicleNumber }).lean()
     if (!isEmpty(checkVehicleNum)) {
       throw new BadRequestException('Vehicle Number already used');
     }
-   
+
     const encryptedPassword = cryptr.encrypt(user.password);
     // const decryptedString = cryptr.decrypt(encryptedString);
     const newUser = new this.registerModel({
@@ -42,29 +42,7 @@ export class RegisterService {
     return newUser.save();
   }
 
-  async createManager(manager: managerDto): Promise<any> {
-
-    const checkMail = await this.registerModel.findOne( { email: manager.email } ).lean()
-    if (!isEmpty(checkMail)) {
-      throw new BadRequestException('Email already used');
-    }
-    const encryptedPassword = cryptr.encrypt(manager.password);
-    // const decryptedString = cryptr.decrypt(encryptedString);
-    const newUser = new this.registerModel({
-      name: manager.name,
-      email: manager.email,
-      password: encryptedPassword,
-      role: 'MANAGER'
-    });
-    return newUser.save();
-  }
-
-  async updateManager(manager: string, stationId: string): Promise<any> {
-
-    return await this.registerModel.findByIdAndUpdate(manager,{station: stationId})
-    
-  }
-
+  // Kalani
   async login (user: loginDto): Promise<any> {
     const userDtails = await this.registerModel.findOne( { email: user.email } ).lean()
     if (isEmpty(userDtails)) {
@@ -79,11 +57,13 @@ export class RegisterService {
       loginStatus : true,
       userId : userDtails._id,
       userName : userDtails.name,
+      vehicleNumber : userDtails.vehicleNumber,
       userRole : userDtails.role
     }
     return returnData;
   }
 
+  // lakshan
   async getUser(userId: string): Promise<any> {
     const user = await this.registerModel.findById(userId).lean();
     if (isEmpty(user)) {
@@ -96,6 +76,4 @@ export class RegisterService {
     return await this.registerModel.findByIdAndUpdate(userId, {weeklyQuato: quota});
     
   }
-
- 
 }
