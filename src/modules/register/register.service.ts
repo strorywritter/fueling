@@ -62,4 +62,18 @@ export class RegisterService {
     }
     return returnData;
   }
+
+  // lakshan
+  async getUser(userId: string): Promise<any> {
+    const user = await this.registerModel.findById(userId).lean();
+    if (isEmpty(user)) {
+      throw new BadRequestException('Invalid User');
+    }
+    return user;
+  }
+
+  async reduceWeeklyQuota(userId: string, quota: number): Promise<any> {
+    return await this.registerModel.findByIdAndUpdate(userId, {weeklyQuato: quota});
+    
+  }
 }
