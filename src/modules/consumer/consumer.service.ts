@@ -25,7 +25,7 @@ export class ConsumerService {
     const checkFuelAvailability = await this.stationrService.getStationById(
       request.station,
     );
-    if (checkFuelAvailability.stock < request.amount) {
+    if (checkFuelAvailability["data"].stock < request.amount) {
       throw new BadRequestException(
         `There is no fuel available on ${request.station}`,
       );
@@ -40,7 +40,7 @@ export class ConsumerService {
     if (isEmpty(checkTimeAvailability)) {
       const newRequsest = await this.consumerModel.create({
         ...request,
-        stationName: checkFuelAvailability.name,
+        stationName: checkFuelAvailability["data"].name,
         user: user,
         vehicleNumber: checkUser.vehicleNumber,
         status: 'REQUESTED',
