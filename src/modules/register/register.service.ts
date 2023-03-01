@@ -76,4 +76,27 @@ export class RegisterService {
     return await this.registerModel.findByIdAndUpdate(userId, {weeklyQuato: quota});
     
   }
+
+  async createManager(manager: managerDto): Promise<any> {
+
+    const checkMail = await this.registerModel.findOne( { email: manager.email } ).lean()
+    if (!isEmpty(checkMail)) {
+      throw new BadRequestException('Email already used');
+    }
+    const encryptedPassword = cryptr.encrypt(manager.password);
+    // const decryptedString = cryptr.decrypt(encryptedString);
+    const newUser = new this.registerModel({
+      name: manager.name,
+      email: manager.email,
+      password: encryptedPassword,
+      role: 'MANAGER'
+    });
+    return newUser.save();
+  }
+
+  async updateManager(manager: string, stationId: string): Promise<any> {
+
+    return await this.registerModel.findByIdAndUpdate(manager,{station: stationId})
+    
+  }
 }
